@@ -13,3 +13,10 @@ export function ValidatePassword(password : string) : boolean {
     }
     return true;
 }
+
+export function ValidateDoc(name : string) : boolean {
+    if(name===''){
+        return false;
+    }
+    return true;
+}
