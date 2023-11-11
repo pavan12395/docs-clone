@@ -12,7 +12,7 @@
   
       // Optional: Additional settings
     },
-    "include": ["**/*.ts"],  // Specify files to include in compilation
+    "include": ["**/*.ts", "client/test.js"],  // Specify files to include in compilation
     "exclude": ["node_modules"]   // Specify files to exclude from compilation
   }
   
