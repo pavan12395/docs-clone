@@ -1,0 +1,45 @@
+# High level design
+
+(lastSyncedVersion , sentChanges , pendingChanges , Document) --> Maintained on the client side
+
+(revisionLog  , pendingChanges , Document , version) --> Maintained on the server side
+
+
+Concepts :- 
+
+1) OperationObject :- {id : userName_randomHash(index,content) , operationType , operationContent};
+
+Client side :-
+
+1) Client will push pendingChanges to server via apiCall or io-socket.emit in regular intervals of time(assume for every 10 seconds)
+    Request data or emit data --> version , pendingChanges
+    Response , ack if ack --> remove all the pendingChanges
+
+2) Client will be recieving an io-socket event from the server
+    Event data :- version , resolvedChanges
+    algo :- 
+        all the resolvedChanges are applied to docs
+        comparing the operation_id , if same remove it from sentChanges array
+        apply all the changes to docs , update version.
+
+3) Client will be having two states , RESOLVING , PUSHING
+    if state is PUSHING , then only  we will be able to push the changes
+    else : push interval thread shouldnt execute
+
+
+
+Server side :- 
+
+1) Server will be having two states , RESOLVING , LISTENING
+    if state is LISTENING , then only it can accept requests or events from the clients
+    else dont process the client requests or events
+
+2) Server will be recieving requests from the clients
+    Request(version,pendingChanges)
+    Response(ack) , add it to localPendingChanges
+
+3) Server will be trying to resolve all the accumulated pendingChanges at regular intervals of time(assume for every 10 seconds)
+    sorts all collected data in pendingChanges or use a PriorityQueue for this according to OperationIndex
+    resolvedChanges are stored in a seperateVariable with updated OperationIndex
+    Make all changes on localDocData , Increment Version
+    Emit data to all the clients with resolvedSortedOperations , version

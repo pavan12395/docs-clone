@@ -1,0 +1,41 @@
+basic user auth -> username,password no JWT
+
+home page --> displays all documents stored with admin access, 
+              User can create a new document and write text in it 
+              User can open an admin document (Owned by himself and can edit it) --> path (/doc/name)
+              User can open another document and edit it
+              Implement Request Edit access(extra)
+
+doc page --> displays the document in an editor
+             Displays various user live cursor locations on it
+             Resolves conflicts using Operational Transforms
+             Displays users who edited a particular line to the Admin (extra)
+
+Home page does have Navbar displaying , username and Logout button
+
+
+Solutions :- 
+
+MySQL tables :- 
+    Users (varchar(20) name,varchar(20) password) --> index on field `name`
+    #How do we store documents in the DB and documents will be fetched rapidly , Blobs vs FileSystem
+    Docs (varchar(20) name,varchar(20) userName , Longblob docData); --> index on field `name`
+
+
+Redis Cache :- 
+    Stores the details of all the documents and a Worker will actively sync it with DB for every 1 min
+    all api's interacting with the database first query Redis
+        if not present , fetch them from db and store them in cache
+        if present , fetch it
+
+
+API'S :- 
+
+    /signUp
+    /login
+    /fetchAllDocs :- request :- null , response :- name,userName,docData
+    /editDoc :- request :- name,docData -> update docs set docData = ? where name = ?
+    /addDoc :- request :- name,docData,userName
+    /deleteDoc :- request :- name
+    /getDoc :- request :- name
+

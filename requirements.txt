@@ -1,0 +1,26 @@
+Beginner :- 
+
+1) user basic auth(signup,login,logout)
+2) user can add docs,edit docs ( no access control)
+3) OperationalTransform feature ( No cursors needed for any line or word in the doc)
+4) Document contains only one line
+5) Implement it using TypeScript (learn)
+
+Deadline :- Sunday (afternoon)
+
+
+
+Intermediate :- 
+
+1) OperationTransform with Document consisting of more than one lines adding (lineIndex in OperationObject)
+2) Admin access for Users
+3) AdminUser can delete docs
+4) OtherUsers can readonly these docs,  RequestEditAccessFeature
+
+Deadline :- Monday (evening)
+
+Advanced :-
+
+1) Add caching layer between MySQL database and backend
+2) Implement JWT auth
+3) Can we do something instead of rejecting a versionMisMatch
