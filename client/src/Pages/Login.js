@@ -13,14 +13,18 @@ const Login = () => {
       name: usernameRef.current.value,
       password: passwordRef.current.value,
     };
-
+  
     try {
-      // Call your API endpoint for login (e.g., localhost:5023/login)
-      // If successful, you can navigate to the Home page
-      // For demonstration purposes, let's assume a successful login
-      console.log('Login successful!', loginData);
+      // Make a GET request with query parameters
+      const response = await axios.get('http://localhost:5023/login', {
+        params: loginData,
+      });
+  
+      // Handle the response
+      console.log('Response:', response.data);
     } catch (error) {
-      console.error('Error in login:', error);
+      // Handle errors
+      console.error('Error:', error);
     }
   };
 

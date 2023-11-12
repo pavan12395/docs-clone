@@ -13,14 +13,16 @@ const SignUp = () => {
       name: usernameRef.current.value,
       password: passwordRef.current.value,
     };
-
+  
     try {
-      // Call your API endpoint for signup (e.g., localhost:5023/signUp)
-      // If successful, you can navigate to the Home page
-      // For demonstration purposes, let's assume a successful signup
-      console.log('Sign up successful!', signUpData);
+      // Make a POST request with the data in the request body
+      const response = await axios.post('http://localhost:5023/signup', signUpData);
+  
+      // Handle the response
+      console.log('Response:', response.data);
     } catch (error) {
-      console.error('Error in sign up:', error);
+      // Handle errors
+      console.error('Error:', error);
     }
   };
 
