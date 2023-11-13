@@ -1,6 +1,6 @@
 import {ConnectDB} from './database/db';
 import express from 'express';
-import { SignUpRequest,SignUpResponse,LoginRequest,LoginResponse, AddDocRequest, AddDocResponse, GetDocRequest, GetDocResponse, EditDocRequest, EditDocResponse} from './types/type';
+import { SignUpRequest,SignUpResponse,LoginRequest,LoginResponse, AddDocRequest, AddDocResponse, GetDocRequest, GetDocResponse, EditDocRequest, EditDocResponse, GetDocsResponse} from './types/type';
 import { ValidateDoc, ValidatePassword, ValidateSignUpRequest } from './validate/validator';
 import User from './models/User';
 import Doc from './models/Doc';
@@ -23,6 +23,11 @@ app.post("/signUp",async (req,res,next)=>
     const signUpRequest = req.body as SignUpRequest
     const validatorResponse : boolean = ValidateSignUpRequest(signUpRequest);
     if(validatorResponse){
+        const user : User = await User.findByPk(signUpRequest.name) as User;
+        if(user!=null){
+            var signUpResponse : SignUpResponse = {message:"User with this name already Exists!"};
+            return res.status(400).json(signUpResponse);
+        }
         try{
         await User.create({name: signUpRequest.name,password : signUpRequest.password})
         var signUpResponse : SignUpResponse = {message:"User created!"};
@@ -33,15 +38,14 @@ app.post("/signUp",async (req,res,next)=>
             return res.status(200).json(signUpResponse);
         }
     }
-    else {
-        var signUpResponse : SignUpResponse = {message:"Validation failed for Input data!"};
-        return res.status(400).json(signUpResponse);
-    }
+    var signUpResponse : SignUpResponse = {message:"Validation failed for Input data!"};
+    return res.status(400).json(signUpResponse);
 });
 
-app.get("/login",async (req,res,next)=>
+app.post("/login",async (req,res,next)=>
 {
     const loginRequest = req.body as LoginRequest;
+    console.log(loginRequest.name+" and "+loginRequest.password);
     const validatorResponse : boolean = ValidatePassword(loginRequest.password);
     if(validatorResponse){
         const user : User = await User.findByPk(loginRequest.name) as User;
@@ -67,6 +71,7 @@ app.post("/addDoc",async (req,res,next)=>{
             return res.status(200).json(addDocResponse);
         }
         catch(e){
+            console.log(e);
             var addDocResponse : AddDocResponse = {message:"Error in Adding Doc to Database"};
             return res.status(500).json(addDocResponse);
         }
@@ -116,6 +121,12 @@ app.get("/getDoc",async (req,res,next)=>{
     }
 });
 
+
+app.get("/getDocs",async (req,res,next)=>{
+    var docs : Doc[] = await Doc.findAll();
+    var getDocsResponse : GetDocsResponse = {docs : docs};
+    return res.status(200).json(getDocsResponse);
+})
 
 
 app.listen(5023,()=>

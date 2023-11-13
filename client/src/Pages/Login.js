@@ -1,10 +1,16 @@
 // Login.js
 import React, { useRef } from 'react';
-import { Link } from 'react-router-dom';
+import { Link,useNavigate} from 'react-router-dom';
+import axios from 'axios';
+import {useDispatch} from 'react-redux';
+import { CHANGE_USER_NAME } from '../Redux/actions';
+
 
 const Login = () => {
   const usernameRef = useRef(null);
   const passwordRef = useRef(null);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -13,18 +19,15 @@ const Login = () => {
       name: usernameRef.current.value,
       password: passwordRef.current.value,
     };
-  
+    console.log(loginData);
     try {
-      // Make a GET request with query parameters
-      const response = await axios.get('http://localhost:5023/login', {
-        params: loginData,
-      });
-  
-      // Handle the response
-      console.log('Response:', response.data);
+      const response = await axios.post('http://localhost:5023/login',loginData);
+      dispatch({type:CHANGE_USER_NAME,payload:usernameRef.current.value});
+      navigate("/home");
     } catch (error) {
-      // Handle errors
-      console.error('Error:', error);
+        console.log(error);
+      alert(error.response.data.message);
+
     }
   };
 

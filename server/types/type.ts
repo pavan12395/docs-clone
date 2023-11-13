@@ -56,3 +56,7 @@ export interface GetDocResponse {
     docData : string,
     message : string
 }
+
+export interface GetDocsResponse {
+    docs : Doc[]
+}

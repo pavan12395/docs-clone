@@ -136,3 +136,51 @@ button:hover {
 .link:hover {
   color: #2574a9;
 }
+
+
+
+/* index.css */
+body {
+  font-family: 'Arial', sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+.home-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 20px;
+}
+
+.create-button {
+  margin-top: 20px;
+}
+
+.create-button a {
+  text-decoration: none;
+  padding: 10px 20px;
+  background-color: #3498db;
+  color: #fff;
+  border-radius: 5px;
+}
+
+.documents-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.document {
+  text-decoration: none;
+  padding: 10px;
+  margin: 5px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  width: 200px;
+  text-align: center;
+  color: #333;
+  background-color: #f8f8f8;
+  transition: background-color 0.3s ease;
+}

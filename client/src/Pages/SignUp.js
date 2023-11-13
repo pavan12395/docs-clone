@@ -1,10 +1,15 @@
 // SignUp.js
 import React, { useRef } from 'react';
-import { Link } from 'react-router-dom';
+import { Link,useNavigate} from 'react-router-dom';
+import axios from 'axios';
+import {useDispatch} from 'react-redux';
+import { CHANGE_USER_NAME } from '../Redux/actions';
 
 const SignUp = () => {
   const usernameRef = useRef(null);
   const passwordRef = useRef(null);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const handleSignUp = async (e) => {
     e.preventDefault();
@@ -15,14 +20,12 @@ const SignUp = () => {
     };
   
     try {
-      // Make a POST request with the data in the request body
-      const response = await axios.post('http://localhost:5023/signup', signUpData);
-  
-      // Handle the response
-      console.log('Response:', response.data);
+      const response = await axios.post('http://localhost:5023/signup', signUpData);  
+      console.log(response);
+      dispatch({type:CHANGE_USER_NAME,payload:usernameRef.current.value});
+      navigate("/home");
     } catch (error) {
-      // Handle errors
-      console.error('Error:', error);
+      alert(error.response.data.message);
     }
   };
 
